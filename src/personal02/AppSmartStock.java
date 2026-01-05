@@ -64,9 +64,14 @@ public class AppSmartStock {
                     if (contadorInventario == 0){
                         System.out.println("::ERROR:: Debes crear un inventario");
                     }else{
-                        Inventario seleccionadoBusqueda = escogerInventario();
-                        buscarProducto(seleccionadoBusqueda);
+                        Inventario seleccionadoStock = escogerInventario();
+                        informeStock(seleccionadoStock);
                     }
+                    break;
+
+                case 6:
+                    System.out.println("::EXIT");
+                    System.exit(0);
                     break;
             }
         }
@@ -136,10 +141,10 @@ public class AppSmartStock {
     }
 
     public static void listarInventario(Inventario inventario){
-        for (Inventario i : almacen){
-            System.out.println("\n-----------------------------");
-            System.out.println(i.toString());
-            System.out.println("-----------------------------");
+        for (int i = 0; i < inventario.getProductos().length; i++){
+            System.out.println("-------------------------------------------");
+            System.out.println(inventario.getProductos()[i].toString());
+            System.out.println("-------------------------------------------");
         }
     }
 
@@ -155,8 +160,12 @@ public class AppSmartStock {
     }
 
     public static void informeStock(Inventario inventario){
-        for (Inventario i : almacen){
+        Scanner sc = new Scanner(System.in);
+        int limiteRepsicion;
 
-        }
+        System.out.print("\nIntroduce el limite de stock: ");
+        limiteRepsicion = sc.nextInt();
+
+        System.out.println(inventario.getProductos()[limiteRepsicion].toString());
     }
 }

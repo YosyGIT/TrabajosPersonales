@@ -36,6 +36,10 @@ public class Producto {
         return id;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
     @Override
     public String toString() {
         return "--PRODUCTO [ID] " + this.id + "--" + "\n" +

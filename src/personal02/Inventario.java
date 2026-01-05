@@ -12,6 +12,14 @@ public class Inventario{
         this.productos = new Producto[50];
     }
 
+    public Producto[] getProductos() {
+        return productos;
+    }
+
+    public void setProductos(Producto[] productos) {
+        this.productos = productos;
+    }
+
     public boolean agragarProducto(Producto producto) {
         boolean encontrado = false;
 
@@ -32,13 +40,12 @@ public class Inventario{
         return encontrado;
     }
 
-    public boolean[] generarInforme(int limiteRepsicion){
-        boolean[] reponer = new boolean[productos.length];
-        int posicion = 0;
+    public Producto[] generarInforme(int limiteRepsicion){
+        Producto[] reponer = new Producto[productos.length];
 
         for (int i = 0; i < productos.length; i++) {
             if (productos[i] != null && productos[i].getCantidad() <= limiteRepsicion) {
-                reponer[i] = true;
+                reponer[i] = this.productos[i];
             }
         }
         return reponer;
