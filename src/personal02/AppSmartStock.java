@@ -13,7 +13,7 @@ public class AppSmartStock {
         int opcion = 0;
 
         while(opcion != 6){
-            System.out.println("=====MENU SMART STOCK=====");
+            System.out.println("\n=====MENU SMART STOCK=====");
             System.out.println("1. Crear inventario");
             System.out.println("2. Añadir producto");
             System.out.println("3. Ver Inventario Ordenado");
@@ -91,17 +91,20 @@ public class AppSmartStock {
             almacen[contadorInventario] = new Inventario(tamanioInventario);
             contadorInventario++;
 
-            System.out.println("-::Creado correctamente::-  Se le asigno el número " + contadorInventario + " al inventario.");
+            System.out.println("-::Creado correctamente::-  Se le asigno el número " + (contadorInventario - 1) + " al inventario.");
         }
     }
 
     public static Inventario escogerInventario(){
         Scanner sc = new Scanner(System.in);
-        int inventario;
+        int inventario, pos = 0;
 
         System.out.println("----INVENTARIOS EXISTENTES----");
-        for (Inventario i : almacen) {
-            System.out.println("-: " + i + " :-");
+        for (int i = 0; i < almacen.length; i++) {
+            if (almacen[i] != null){
+                System.out.println("-INTRODUCE:" + i + " :-");
+                pos++;
+            }
         }
 
         System.out.print("\n- Elije el inventario al que quieres añadir el producto: ");
@@ -118,33 +121,32 @@ public class AppSmartStock {
     public static void agregarProducto(Inventario inventario){
         Scanner sc = new Scanner(System.in);
 
-        int cantidad;
-        double precio;
-        String nombre;
+        System.out.print("Introduce el nombre del producto: ");
+        String nombre = sc.next();
+        System.out.print("Introduce el precio: ");
+        double precio = sc.nextDouble();
+        System.out.print("Introduce la cantidad: ");
+        int cantidad = sc.nextInt();
 
-        System.out.print("Introduce el nombre del inventario: ");
-        nombre = sc.next();
-        System.out.print("Introduce el precio del inventario: ");
-        precio = sc.nextDouble();
-        System.out.print("Introduce el cantidad del inventario: ");
-        cantidad = sc.nextInt();
+        Producto nuevo = new Producto(nombre, precio, cantidad);
 
-        productos[contadorProducto] = new Producto(nombre, precio, cantidad);
-
-        if (inventario.agragarProducto(productos[contadorProducto])){
-            inventario.agragarProducto(productos[contadorProducto]);
-            System.out.println("-::Producto agregado correctamente::- Se le asigno el [ID]: " + productos[contadorProducto].getId());
+        if (inventario.agragarProducto(nuevo)){
+            System.out.println("-::Producto agregado correctamente::- [ID]: " + nuevo.getId());
+            productos[contadorProducto] = nuevo;
             contadorProducto++;
-        }else {
-            inventario.warning();
+        } else {
+            System.out.println("::ERROR:: No se pudo agregar (Inventario lleno o duplicado)");
         }
     }
 
     public static void listarInventario(Inventario inventario){
-        for (int i = 0; i < inventario.getProductos().length; i++){
-            System.out.println("-------------------------------------------");
-            System.out.println(inventario.getProductos()[i].toString());
-            System.out.println("-------------------------------------------");
+        Producto[] lista = inventario.getProductos();
+        for (int i = 0; i < lista.length; i++){
+            if (lista[i] != null) {
+                System.out.println("-------------------------------------------");
+                System.out.println(lista[i].toString());
+                System.out.println("-------------------------------------------");
+            }
         }
     }
 
@@ -161,11 +163,13 @@ public class AppSmartStock {
 
     public static void informeStock(Inventario inventario){
         Scanner sc = new Scanner(System.in);
-        int limiteRepsicion;
+        System.out.print("\nMostrar productos con stock menor o igual a: ");
+        int limite = sc.nextInt();
 
-        System.out.print("\nIntroduce el limite de stock: ");
-        limiteRepsicion = sc.nextInt();
-
-        System.out.println(inventario.getProductos()[limiteRepsicion].toString());
+        for (Producto p : inventario.getProductos()) {
+            if (p != null && p.getCantidad() <= limite) {
+                System.out.println(p.toString());
+            }
+        }
     }
 }
