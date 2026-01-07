@@ -16,10 +16,6 @@ public class Inventario{
         return productos;
     }
 
-    public void setProductos(Producto[] productos) {
-        this.productos = productos;
-    }
-
     public boolean agragarProducto(Producto producto) {
         boolean encontrado = false;
 

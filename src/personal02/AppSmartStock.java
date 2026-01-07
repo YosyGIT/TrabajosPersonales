@@ -8,7 +8,6 @@ public class AppSmartStock {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        sc.useLocale(Locale.US);
 
         int opcion = 0;
 
@@ -22,9 +21,10 @@ public class AppSmartStock {
             System.out.println("6. Salir");
             System.out.print("->");
             opcion = sc.nextInt();
+            sc.nextLine();
 
             while(opcion > 6 || opcion < 1){
-                System.out.print("\n" + "Elección incorrecta, vuelva a intentarlo: ");
+                System.out.print("\nElección incorrecta, vuelva a intentarlo: ");
                 opcion = sc.nextInt();
             }
 
@@ -70,8 +70,7 @@ public class AppSmartStock {
                     break;
 
                 case 6:
-                    System.out.println("::EXIT");
-                    System.exit(0);
+                    System.out.println("-::EXIT::-");
                     break;
             }
         }
@@ -97,13 +96,12 @@ public class AppSmartStock {
 
     public static Inventario escogerInventario(){
         Scanner sc = new Scanner(System.in);
-        int inventario, pos = 0;
+        int inventario;
 
         System.out.println("----INVENTARIOS EXISTENTES----");
         for (int i = 0; i < almacen.length; i++) {
             if (almacen[i] != null){
-                System.out.println("-INTRODUCE:" + i + " :-");
-                pos++;
+                System.out.println("-: NUMERO DE INVENTARIO [" + i + "] :-");
             }
         }
 
@@ -120,11 +118,13 @@ public class AppSmartStock {
 
     public static void agregarProducto(Inventario inventario){
         Scanner sc = new Scanner(System.in);
+        String precioLimpieza;
 
         System.out.print("Introduce el nombre del producto: ");
-        String nombre = sc.next();
+        String nombre = sc.nextLine();
         System.out.print("Introduce el precio: ");
-        double precio = sc.nextDouble();
+        precioLimpieza = sc.nextLine();
+        double precio = Double.parseDouble(precioLimpieza.replaceAll(",", "."));
         System.out.print("Introduce la cantidad: ");
         int cantidad = sc.nextInt();
 
@@ -140,11 +140,10 @@ public class AppSmartStock {
     }
 
     public static void listarInventario(Inventario inventario){
-        Producto[] lista = inventario.getProductos();
-        for (int i = 0; i < lista.length; i++){
-            if (lista[i] != null) {
+        for (Producto p : inventario.getProductos()){
+            if (p != null) {
                 System.out.println("-------------------------------------------");
-                System.out.println(lista[i].toString());
+                System.out.println(p.mostrar());
                 System.out.println("-------------------------------------------");
             }
         }
@@ -158,7 +157,11 @@ public class AppSmartStock {
         System.out.print("->");
         busqueda = sc.next();
 
-        inventario.buscarProductos(busqueda);
+        for (Producto p : inventario.buscarProductos(busqueda)){
+            System.out.println("-------------------------------------------");
+            System.out.println(p.mostrar());
+            System.out.println("-------------------------------------------");
+        }
     }
 
     public static void informeStock(Inventario inventario){
@@ -166,10 +169,9 @@ public class AppSmartStock {
         System.out.print("\nMostrar productos con stock menor o igual a: ");
         int limite = sc.nextInt();
 
-        for (Producto p : inventario.getProductos()) {
-            if (p != null && p.getCantidad() <= limite) {
-                System.out.println(p.toString());
-            }
+        for (Producto p : inventario.generarInforme(limite)) {
+            System.out.println(p.mostrar());
+            System.out.println("::NECESITA REPOSICIÓN::");
         }
     }
 }

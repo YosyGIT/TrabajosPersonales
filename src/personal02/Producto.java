@@ -40,11 +40,10 @@ public class Producto {
         return precio;
     }
 
-    @Override
-    public String toString() {
+    public String mostrar() {
         return "--PRODUCTO [ID] " + this.id + "--" + "\n" +
                 "NOMBRE: " + this.nombre + "\n" +
                 "CANTIDAD: " + this.cantidad + "\n" +
-                "PRECIO: " + this.precio;
+                "PRECIO: " + this.precio + "€";
     }
 }
