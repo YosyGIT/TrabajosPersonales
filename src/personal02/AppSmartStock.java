@@ -1,16 +1,22 @@
 package personal02;
 import java.util.*;
+
+/**
+ * @author YosyGIT
+ */
 public class AppSmartStock {
+    //Pendiente de modificar
     private static Inventario[] almacen = new Inventario[10];
     private static int contadorInventario = 0;
-    private static Producto[] productos = new Producto[500];
-    private static int contadorProducto = 0;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         int opcion = 0;
 
+        /**
+         * Menu de interación
+         */
         while(opcion != 6){
             System.out.println("\n=====MENU SMART STOCK=====");
             System.out.println("1. Crear inventario");
@@ -76,6 +82,10 @@ public class AppSmartStock {
         }
     }
 
+    /**
+     * Metodo para crear el Inventario, tiene un numero que se asigna en
+     * funcion de la posicion del array de almacen
+     */
     public static void crearInventario(){
         Scanner sc = new Scanner(System.in);
         int tamanioInventario;
@@ -94,6 +104,10 @@ public class AppSmartStock {
         }
     }
 
+    /**
+     * Metodo para poder elejir entre los inventarios del array de almacenes
+     * @return Devuelve el inventario que se elija
+     */
     public static Inventario escogerInventario(){
         Scanner sc = new Scanner(System.in);
         int inventario;
@@ -116,6 +130,10 @@ public class AppSmartStock {
         return almacen[inventario];
     }
 
+    /**
+     * Metodo para agregar productos al inventario que se escoja
+     * @param inventario Inventario seleccionado
+     */
     public static void agregarProducto(Inventario inventario){
         Scanner sc = new Scanner(System.in);
         String precioLimpieza;
@@ -129,16 +147,14 @@ public class AppSmartStock {
         int cantidad = sc.nextInt();
 
         Producto nuevo = new Producto(nombre, precio, cantidad);
-
-        if (inventario.agragarProducto(nuevo)){
-            System.out.println("-::Producto agregado correctamente::- [ID]: " + nuevo.getId());
-            productos[contadorProducto] = nuevo;
-            contadorProducto++;
-        } else {
-            System.out.println("::ERROR:: No se pudo agregar (Inventario lleno o duplicado)");
-        }
+        System.out.println(inventario.agragarProducto(nuevo)?"-::Producto agregado correctamente::- [ID]: " + nuevo.getId():
+                                                            "::ERROR:: No se pudo agregar (Inventario lleno o duplicado)");
     }
 
+    /**
+     * Metodo para mostrar los productos del inventario
+     * @param inventario Inventario seleccionado
+     */
     public static void listarInventario(Inventario inventario){
         for (Producto p : inventario.getProductos()){
             if (p != null) {
@@ -149,6 +165,10 @@ public class AppSmartStock {
         }
     }
 
+    /**
+     * Metodo para buscar productos relacionados con la busqueda
+     * @param inventario Inventario seleccionado
+     */
     public static void buscarProducto(Inventario inventario){
         Scanner sc = new Scanner(System.in);
         String busqueda;
@@ -164,6 +184,11 @@ public class AppSmartStock {
         }
     }
 
+    /**
+     * Metodo para crear el informe de productos con poco stock
+     * que necesitan ser repuestos
+     * @param inventario Inventrario seleccionado
+     */
     public static void informeStock(Inventario inventario){
         Scanner sc = new Scanner(System.in);
         System.out.print("\nMostrar productos con stock menor o igual a: ");
