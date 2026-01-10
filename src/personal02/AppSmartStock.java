@@ -88,16 +88,23 @@ public class AppSmartStock {
      */
     public static void crearInventario(){
         Scanner sc = new Scanner(System.in);
-        int tamanioInventario;
+        String tamanioInventario;
+        int tam;
 
         if (contadorInventario >=almacen.length){
             System.out.println("::ERROR:: No se pueden crear más inventarios");
 
         }else{
             System.out.print("\n" + "Introduce el tamaño del inventario: ");
-            tamanioInventario = sc.nextInt();
+            tamanioInventario = sc.nextLine();
 
-            almacen[contadorInventario] = new Inventario(tamanioInventario);
+            while(!tamanioInventario.matches("[0-9]+")){
+                System.out.print("::ERROR:: Tamaño fuera de rango, prueba de nuevo: ");
+                tamanioInventario = sc.nextLine();
+            }
+
+            tam = Integer.parseInt(tamanioInventario);
+            almacen[contadorInventario] = new Inventario(tam);
             contadorInventario++;
 
             System.out.println("-::Creado correctamente::-  Se le asigno el número " + (contadorInventario - 1) + " al inventario.");
@@ -110,6 +117,7 @@ public class AppSmartStock {
      */
     public static Inventario escogerInventario(){
         Scanner sc = new Scanner(System.in);
+        String inv;
         int inventario;
 
         System.out.println("----INVENTARIOS EXISTENTES----");
@@ -120,12 +128,13 @@ public class AppSmartStock {
         }
 
         System.out.print("\n- Elije el inventario al que quieres añadir el producto: ");
-        inventario = sc.nextInt();
+        inv = sc.nextLine();
 
-        while (inventario < 0 || inventario > almacen.length){
+        while (!inv.matches("[0-9]+") || Integer.parseInt(inv) >= contadorInventario){
             System.out.print("\n::ERROR:: El inventario no existe, vuelva a introducirlo: ");
-            inventario = sc.nextInt();
+            inv = sc.nextLine();
         }
+        inventario = Integer.parseInt(inv);
 
         return almacen[inventario];
     }
@@ -136,15 +145,34 @@ public class AppSmartStock {
      */
     public static void agregarProducto(Inventario inventario){
         Scanner sc = new Scanner(System.in);
-        String precioLimpieza;
+        String aux, nombre;
+        double precio = 0;
+        int cantidad = 0;
 
         System.out.print("Introduce el nombre del producto: ");
-        String nombre = sc.nextLine();
+        nombre = sc.nextLine();
+
         System.out.print("Introduce el precio: ");
-        precioLimpieza = sc.nextLine();
-        double precio = Double.parseDouble(precioLimpieza.replaceAll(",", "."));
+        aux = sc.nextLine();
+        if(aux.matches("^(?=.*[1-9])[0-9]*([.,][0-9]+)?$")){
+            precio = Double.parseDouble(aux.replaceAll(",", "."));
+        }else {
+            while(!aux.matches("^(?=.*[1-9])[0-9]*([.,][0-9]+)?$")){
+                System.out.print(inventario.warning() + "Introduce el precio de nuevo: ");
+                aux = sc.nextLine();
+            }
+            precio = Double.parseDouble(aux.replaceAll(",", "."));
+        }
+
         System.out.print("Introduce la cantidad: ");
-        int cantidad = sc.nextInt();
+        aux = sc.nextLine();
+        if(!aux.matches("[0-9]*")){
+            while(!aux.matches("[0-9]*")){
+                System.out.print(inventario.warning() + "Introduce la cantidad de nuevo: ");
+                aux = sc.nextLine();
+            }
+        }
+        cantidad = Integer.parseInt(aux);
 
         Producto nuevo = new Producto(nombre, precio, cantidad);
         System.out.println(inventario.agragarProducto(nuevo)?"-::Producto agregado correctamente::- [ID]: " + nuevo.getId():
@@ -193,6 +221,7 @@ public class AppSmartStock {
         Scanner sc = new Scanner(System.in);
         System.out.print("\nMostrar productos con stock menor o igual a: ");
         int limite = sc.nextInt();
+        sc.nextLine();
 
         for (Producto p : inventario.generarInforme(limite)) {
             System.out.println(p.mostrar());
