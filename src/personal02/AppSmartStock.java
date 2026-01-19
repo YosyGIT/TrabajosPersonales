@@ -130,7 +130,8 @@ public class AppSmartStock {
         System.out.print("\n- Elije el inventario al que quieres añadir el producto: ");
         inv = sc.nextLine();
 
-        while (!inv.matches("[0-9]+") || Integer.parseInt(inv) >= contadorInventario){
+        while (!inv.matches("[0-9]+") || Integer.parseInt(inv) <= contadorInventario ||
+                Integer.parseInt(inv) >= 0){
             System.out.print("\n::ERROR:: El inventario no existe, vuelva a introducirlo: ");
             inv = sc.nextLine();
         }
